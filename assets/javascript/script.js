@@ -1,8 +1,6 @@
-
-  
-      // Initial array of animals
+  // Initial array of animals
       var animals = ["dog", "cat", "hampster", "lion"];
-      
+  
             // displayanimalInfo function re-renders the HTML to display the appropriate content
             function displayanimalInfo() {
       
@@ -10,37 +8,56 @@
               var queryURL = "http://api.giphy.com/v1/gifs/search?limit=10&q=" + animal + "&api_key=dc6zaTOxFJmzC";
       
               // Creating an AJAX call for the specific animal button being clicked
-              console.log (queryURL)
+
               $.ajax({
                 url: queryURL,
                 method: "GET"
               }).done(function(response) {
-      console.log(response);
-      console.log(response.data["0"].images.original.url);
-                
+     
       for (var index = 0; index < 10; index++) {
-          
-        
-
-      
+   
                 // Creating a div to hold the animal
-                var animalDiv = $("<div class='animal'>");
+                var animalDivName = "animal" + index;
+                var animalDiv = $("<div class="+animalDivName+">");
            
                 // Retrieving the URL for the image
-               var imgURL = response.data[index].images.original.url;
+               var imgURL = response.data[index].images.original_still.url;
+               var imgURLAnimate = response.data[index].images.original.url;
+               var imgURLStill = response.data[index].images.original_still.url;
       
                 // Creating an element to hold the image
-                var image = $("<img>").attr("src", imgURL);
-      
+                var image = $("<img>").attr({
+                    'class': "gif"+index,
+                    src: imgURL,
+                    'data-still': imgURLStill,
+                    'data-animate': imgURLAnimate,
+
+                    'data-state': "still"
+                    }); 
+
                 // Appending the image
                 animalDiv.append(image);
-      
+  
                 // Putting the entire animal above the previous animals
                 $("#animal-images").prepend(animalDiv);
+
+// On Click it will change the state and pause the gif
+$(".gif"+index).on("click", function() {
+    console.log("Click Image Success");
+
+    let $this = $(this),
+    currentState = $this.data('state');
+    console.log (currentState)
+    if ('still' === currentState) {
+      $this.attr('src', $this.data('animate'));
+      $this.data('state', 'moving)');
+    }else {
+      $this.attr('src', $this.data('still'));
+      $this.data('state', 'still');
+    }})    
               }});
       
             }
-      
             // Function for displaying animal data
             function renderButtons() {
       
@@ -64,7 +81,7 @@
                 $("#buttons-view").append(a);
               }
             }
-      
+
             // This function handles events where a animal button is clicked
             $("#add-animal").on("click", function(event) {
               event.preventDefault();
