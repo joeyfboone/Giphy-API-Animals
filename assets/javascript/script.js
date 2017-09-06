@@ -5,7 +5,7 @@
             function displayanimalInfo() {
       
               var animal = $(this).attr("data-name");
-              var queryURL = "http://api.giphy.com/v1/gifs/search?limit=10&q=" + animal + "&api_key=dc6zaTOxFJmzC";
+              var queryURL = "https://api.giphy.com/v1/gifs/search?limit=10&q=" + animal + "&api_key=dc6zaTOxFJmzC";
       
               // Creating an AJAX call for the specific animal button being clicked
 
@@ -13,7 +13,7 @@
                 url: queryURL,
                 method: "GET"
               }).done(function(response) {
-     
+     console.log(response)
       for (var index = 0; index < 10; index++) {
    
                 // Creating a div to hold the animal
